@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class LoginResponse {
-    private Integer code;
+    private int code;
     private String message;
     private Data data;
 

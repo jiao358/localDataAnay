@@ -25,8 +25,4 @@ public class OrderSales {
     private Integer status;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
-
-    // 非数据库字段，用于前端显示
-    private String itemCategoryName;
-    private String tradePlatformName;
 } 
