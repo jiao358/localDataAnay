@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+import router from '@/router'
+import { removeToken } from '@/utils/auth'
 
 // 获取权限列表
 export function getPermissions(params) {
@@ -6,6 +8,12 @@ export function getPermissions(params) {
     url: '/permissions',
     method: 'get',
     params
+  }).catch(error => {
+    if (error.response && error.response.status === 401) {
+      removeToken()
+      router.push('/login')
+    }
+    return Promise.reject(error)
   })
 }
 

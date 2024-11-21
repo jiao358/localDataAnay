@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+import router from '@/router'
+import { removeToken } from '@/utils/auth'
 
 // 获取知识点列表
 export function getKnowledgeList(params) {
@@ -6,6 +8,12 @@ export function getKnowledgeList(params) {
     url: '/knowledge',
     method: 'get',
     params
+  }).catch(error => {
+    if (error.response && error.response.status === 401) {
+      removeToken()
+      router.push('/login')
+    }
+    return Promise.reject(error)
   })
 }
 

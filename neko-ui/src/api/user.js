@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+import router from '@/router'
+import { removeToken } from '@/utils/auth'
 
 // 用户登录
 export function login(data) {
@@ -15,6 +17,12 @@ export function getUsers(params) {
     url: '/users',
     method: 'get',
     params
+  }).catch(error => {
+    if (error.response && error.response.status === 401) {
+      removeToken()
+      router.push('/login')
+    }
+    return Promise.reject(error)
   })
 }
 

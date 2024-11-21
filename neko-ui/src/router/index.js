@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '@/layout'
+import { getToken } from '@/utils/auth'
 
 Vue.use(Router)
 
@@ -18,7 +19,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard', requiresAuth: true }
     }]
   },
   {
@@ -143,5 +144,17 @@ export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher
 }
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!getToken()) {
+      next('/login')
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 
 export default router 

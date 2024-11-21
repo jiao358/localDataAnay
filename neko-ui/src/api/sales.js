@@ -1,15 +1,19 @@
 import request from '@/utils/request'
+import router from '@/router'
+import { removeToken } from '@/utils/auth'
 
 // 获取销售订单列表
 export function getSalesOrders(params) {
   return request({
     url: '/sales',
     method: 'get',
-    params: {
-      ...params,
-      page: params.page || 1,
-      limit: params.limit || 10
+    params
+  }).catch(error => {
+    if (error.response && error.response.status === 401) {
+      removeToken()
+      router.push('/login')
     }
+    return Promise.reject(error)
   })
 }
 

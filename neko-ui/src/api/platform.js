@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+import router from '@/router'
+import { removeToken } from '@/utils/auth'
 
 // 获取平台账号列表
 export function getPlatforms(params) {
@@ -6,6 +8,12 @@ export function getPlatforms(params) {
     url: '/platforms',
     method: 'get',
     params
+  }).catch(error => {
+    if (error.response && error.response.status === 401) {
+      removeToken()
+      router.push('/login')
+    }
+    return Promise.reject(error)
   })
 }
 
@@ -23,6 +31,12 @@ export function createPlatform(data) {
     url: '/platforms',
     method: 'post',
     data
+  }).catch(error => {
+    if (error.response && error.response.status === 401) {
+      removeToken()
+      router.push('/login')
+    }
+    return Promise.reject(error)
   })
 }
 
@@ -32,6 +46,12 @@ export function updatePlatform(data) {
     url: `/platforms/${data.id}`,
     method: 'put',
     data
+  }).catch(error => {
+    if (error.response && error.response.status === 401) {
+      removeToken()
+      router.push('/login')
+    }
+    return Promise.reject(error)
   })
 }
 
@@ -49,5 +69,11 @@ export function deletePlatform(id) {
   return request({
     url: `/platforms/${id}`,
     method: 'delete'
+  }).catch(error => {
+    if (error.response && error.response.status === 401) {
+      removeToken()
+      router.push('/login')
+    }
+    return Promise.reject(error)
   })
 } 
