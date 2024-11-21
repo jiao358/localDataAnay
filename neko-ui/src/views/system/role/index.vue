@@ -216,6 +216,45 @@
           </el-button>
         </div>
       </el-dialog>
+
+      <!-- 权限分配对话框 -->
+      <el-dialog 
+        title="分配权限" 
+        :visible.sync="permissionDialogVisible"
+        width="600px"
+      >
+        <div v-loading="permissionLoading">
+          <el-tree
+            ref="permissionTree"
+            :data="permissionTreeData"
+            :props="defaultProps"
+            show-checkbox
+            node-key="id"
+            :default-checked-keys="selectedPermissionIds"
+          >
+            <span slot-scope="{ data }" class="custom-tree-node">
+              <span>{{ data.permissionName }}</span>
+              <el-tag 
+                size="mini" 
+                :type="getPermissionTypeTag(data.permissionType)"
+                style="margin-left: 8px;"
+              >
+                {{ getPermissionTypeText(data.permissionType) }}
+              </el-tag>
+            </span>
+          </el-tree>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="permissionDialogVisible = false">取 消</el-button>
+          <el-button 
+            type="primary" 
+            @click="saveRolePermissions" 
+            :loading="savePermissionLoading"
+          >
+            确 定
+          </el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -223,6 +262,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getRoles, createRole, updateRole, updateRoleStatus } from '@/api/role'
+import { getRolePermissions, updateRolePermissions } from '@/api/role'
+import { getPermissions } from '@/api/permission'
 
 export default {
   name: 'RoleManagement',
@@ -248,13 +289,23 @@ export default {
       },
       rules: {
         roleName: [
-          { required: true, message: '请输入角色名��', trigger: 'blur' },
+          { required: true, message: '请输入角色名', trigger: 'blur' },
           { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
         ],
         roleCode: [
           { required: true, message: '请输入角色编码', trigger: 'blur' },
           { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
         ]
+      },
+      permissionDialogVisible: false,
+      permissionLoading: false,
+      savePermissionLoading: false,
+      permissionTreeData: [],
+      selectedPermissionIds: [],
+      currentRoleId: null,
+      defaultProps: {
+        children: 'children',
+        label: 'permissionName'
       }
     }
   },
@@ -333,7 +384,9 @@ export default {
       })
     },
     handlePermission(row) {
-      this.$message.info('权限分配功能开发中')
+      this.currentRoleId = row.id
+      this.permissionDialogVisible = true
+      this.loadPermissionData(row.id)
     },
     async handleStatus(row) {
       try {
@@ -411,6 +464,92 @@ export default {
         console.error('Date formatting error:', e)
         return dateTime
       }
+    },
+    // 加载权限数据
+    async loadPermissionData(roleId) {
+      try {
+        this.permissionLoading = true
+        // 获取所有权限列表
+        const permissionsResponse = await getPermissions()
+        const permissions = Array.isArray(permissionsResponse) 
+          ? permissionsResponse 
+          : (permissionsResponse.records || [])
+        
+        // 构建树形结构
+        this.permissionTreeData = this.buildPermissionTree(permissions)
+        
+        // 获取角色当前权限
+        const rolePermissionsResponse = await getRolePermissions(roleId)
+        this.selectedPermissionIds = rolePermissionsResponse.map(p => p.id)
+      } catch (error) {
+        console.error('Failed to get permissions:', error)
+        this.$message.error('获取权限信息失败')
+      } finally {
+        this.permissionLoading = false
+      }
+    },
+    // 构建权限树
+    buildPermissionTree(permissions) {
+      const permissionMap = {}
+      const result = []
+
+      // 创建映射
+      permissions.forEach(permission => {
+        permissionMap[permission.id] = { ...permission, children: [] }
+      })
+
+      // 构建树形结构
+      permissions.forEach(permission => {
+        const node = permissionMap[permission.id]
+        if (permission.parentId) {
+          const parent = permissionMap[permission.parentId]
+          if (parent) {
+            parent.children.push(node)
+          }
+        } else {
+          result.push(node)
+        }
+      })
+
+      return result
+    },
+    // 保存角色权限
+    async saveRolePermissions() {
+      if (!this.currentRoleId) return
+
+      try {
+        this.savePermissionLoading = true
+        const checkedKeys = this.$refs.permissionTree.getCheckedKeys()
+        const halfCheckedKeys = this.$refs.permissionTree.getHalfCheckedKeys()
+        const allSelectedKeys = [...checkedKeys, ...halfCheckedKeys]
+        
+        await updateRolePermissions(this.currentRoleId, allSelectedKeys)
+        this.$message.success('权限分配成功')
+        this.permissionDialogVisible = false
+      } catch (error) {
+        console.error('Failed to update role permissions:', error)
+        this.$message.error('权限分配失败')
+      } finally {
+        this.savePermissionLoading = false
+      }
+    },
+    // 获取权限类型文本
+    getPermissionTypeText(type) {
+      const types = {
+        1: '菜单',
+        2: '按钮',
+        3: '接口'
+      }
+      return types[type] || '未知'
+    },
+    // 获取权限类型标签样式
+    getPermissionTypeTag(type) {
+      const types = {
+        1: 'primary',
+        2: 'success',
+        3: 'warning'
+      }
+      return types[type] || 'info'
     }
   }
 }
@@ -537,5 +676,29 @@ export default {
       border-color: #409EFF;
     }
   }
+}
+
+// 权限树样式
+.custom-tree-node {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+:deep(.el-tree) {
+  background-color: transparent;
+  color: #000000;
+  
+  .el-tree-node__content {
+    height: 32px;
+    
+    &:hover {
+      background-color: #f5f7fa;
+    }
+  }
+}
+
+:deep(.el-tree-node.is-current > .el-tree-node__content) {
+  background-color: #f0f7ff;
 }
 </style> 

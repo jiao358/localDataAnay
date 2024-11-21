@@ -15,32 +15,23 @@ public class AuthService {
     public LoginResponse login(String username, String password) {
         // 保留admin用户的快速登录
         if ("admin".equals(username) && "123456".equals(password)) {
-            return LoginResponse.success(
-                "mock-jwt-token-" + System.currentTimeMillis(),
-                username,
-                new String[]{"admin"}
-            );
+            LoginResponse response = new LoginResponse();
+            response.setCode(200);
+            response.setMessage("登录成功");
+            
+            LoginResponse.Data data = new LoginResponse.Data();
+            data.setToken("mock-jwt-token-" + System.currentTimeMillis());
+            data.setUsername(username);
+            data.setRoles(new String[]{"admin"});
+            
+            response.setData(data);
+            return response;
         }
+        throw new RuntimeException("用户名或密码错误");
+    }
 
-        // 数据库用户验证
-        SysUser user = userMapper.findByUsername(username);
-        if (user == null) {
-            return LoginResponse.error("用户不存在");
-        }
-
-        // TODO: 这里应该对密码进行加密后再比较
-        if (!password.equals(user.getPassword())) {
-            return LoginResponse.error("密码错误");
-        }
-
-        if (user.getStatus() != 1) {
-            return LoginResponse.error("用户已被禁用");
-        }
-
-        return LoginResponse.success(
-            "jwt-token-" + System.currentTimeMillis(),
-            user.getUsername(),
-            new String[]{"user"}  // 这里可以根据实际角色表来设置
-        );
+    public void logout() {
+        // 这里可以添加清除用户会话的逻辑
+        // 比如清除 token、清除缓存等
     }
 } 

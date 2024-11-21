@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neko.mapper.KnowledgeDataMapper">
+    <select id="selectList" resultType="com.neko.entity.KnowledgeData">
+        SELECT * FROM knowledge_data
+        <where>
+            <if test="contentName != null and contentName != ''">
+                AND content_name LIKE CONCAT('%', #{contentName}, '%')
+            </if>
+            <if test="contentCategory != null and contentCategory != ''">
+                AND content_category = #{contentCategory}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectById" resultType="com.neko.entity.KnowledgeData">
+        SELECT * FROM knowledge_data WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.neko.entity.KnowledgeData" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO knowledge_data (
+            content_name, content_category, content_url,
+            content_summary, process_image, status
+        ) VALUES (
+            #{contentName}, #{contentCategory}, #{contentUrl},
+            #{contentSummary}, #{processImage}, #{status}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.neko.entity.KnowledgeData">
+        UPDATE knowledge_data
+        <set>
+            <if test="contentName != null">content_name = #{contentName},</if>
+            <if test="contentCategory != null">content_category = #{contentCategory},</if>
+            <if test="contentUrl != null">content_url = #{contentUrl},</if>
+            <if test="contentSummary != null">content_summary = #{contentSummary},</if>
+            <if test="processImage != null">process_image = #{processImage},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM knowledge_data WHERE id = #{id}
+    </delete>
+</mapper> 

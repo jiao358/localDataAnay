@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neko.mapper.MultiPlatformDataMapper">
+    <select id="selectList" resultType="com.neko.entity.MultiPlatformData">
+        SELECT * FROM multi_platform_data
+        <where>
+            <if test="accountName != null and accountName != ''">
+                AND account_name LIKE CONCAT('%', #{accountName}, '%')
+            </if>
+            <if test="platformType != null and platformType != ''">
+                AND platform_type = #{platformType}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectById" resultType="com.neko.entity.MultiPlatformData">
+        SELECT * FROM multi_platform_data WHERE id = #{id}
+    </select>
+
+    <select id="selectByAccountName" resultType="com.neko.entity.MultiPlatformData">
+        SELECT * FROM multi_platform_data WHERE account_name = #{accountName}
+    </select>
+
+    <insert id="insert" parameterType="com.neko.entity.MultiPlatformData" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO multi_platform_data (
+            account_name, account_password, security_info,
+            payment_password, platform_type, platform_url, status
+        ) VALUES (
+            #{accountName}, #{accountPassword}, #{securityInfo},
+            #{paymentPassword}, #{platformType}, #{platformUrl}, #{status}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.neko.entity.MultiPlatformData">
+        UPDATE multi_platform_data
+        <set>
+            <if test="accountPassword != null">account_password = #{accountPassword},</if>
+            <if test="securityInfo != null">security_info = #{securityInfo},</if>
+            <if test="paymentPassword != null">payment_password = #{paymentPassword},</if>
+            <if test="platformType != null">platform_type = #{platformType},</if>
+            <if test="platformUrl != null">platform_url = #{platformUrl},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE multi_platform_data SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM multi_platform_data WHERE id = #{id}
+    </delete>
+</mapper> 

@@ -1,9 +1,9 @@
 <template>
-  <div class="dashboard-container">
+  <div class="app-container">
     <!-- 顶部导航栏 -->
     <div class="top-navbar">
       <div class="left-section">
-        <div class="brand">
+        <div class="brand" @click="goToDashboard">
           <i class="el-icon-platform-eleme brand-icon"></i>
           <span class="brand-text">Neko Admin</span>
         </div>
@@ -30,56 +30,135 @@
       </div>
     </div>
 
-    <!-- 欢迎区域 -->
-    <div class="welcome-section">
-      <div class="dashboard-text">Welcome to Neko Admin</div>
-      <div class="dashboard-subtitle">优雅、简约、高效的后台管理系统</div>
+    <!-- 主内容区域 -->
+    <div class="main-content">
+      <div class="welcome-section">
+        <div class="dashboard-text">Welcome to Neko Admin</div>
+        <div class="dashboard-subtitle">优雅、简约、高效的后台管理系统</div>
+      </div>
+      
+      <el-row :gutter="24" class="panel-group">
+        <!-- 用户管理 -->
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <router-link to="/system/user">
+            <div class="panel-item">
+              <div class="panel-content">
+                <i class="el-icon-user panel-icon"></i>
+                <div class="panel-info">
+                  <div class="panel-title">用户管理</div>
+                  <div class="panel-desc">User Management</div>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </el-col>
+
+        <!-- 角色管理 -->
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <router-link to="/system/role">
+            <div class="panel-item">
+              <div class="panel-content">
+                <i class="el-icon-s-custom panel-icon"></i>
+                <div class="panel-info">
+                  <div class="panel-title">角色管理</div>
+                  <div class="panel-desc">Role Management</div>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </el-col>
+
+        <!-- 权限管理 -->
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <router-link to="/system/permission">
+            <div class="panel-item">
+              <div class="panel-content">
+                <i class="el-icon-key panel-icon"></i>
+                <div class="panel-info">
+                  <div class="panel-title">权限管理</div>
+                  <div class="panel-desc">Permission Management</div>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </el-col>
+
+        <!-- 字典管理 -->
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <router-link to="/system/dict">
+            <div class="panel-item">
+              <div class="panel-content">
+                <i class="el-icon-collection panel-icon"></i>
+                <div class="panel-info">
+                  <div class="panel-title">字典管理</div>
+                  <div class="panel-desc">Dictionary Management</div>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </el-col>
+
+        <!-- 淘宝交易快照 -->
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <router-link to="/system/order">
+            <div class="panel-item">
+              <div class="panel-content">
+                <i class="el-icon-shopping-cart-full panel-icon"></i>
+                <div class="panel-info">
+                  <div class="panel-title">淘宝交易快照</div>
+                  <div class="panel-desc">Taobao Trade Snapshot</div>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </el-col>
+
+        <!-- 销售订单 -->
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <router-link to="/system/sales">
+            <div class="panel-item">
+              <div class="panel-content">
+                <i class="el-icon-shopping-bag-1 panel-icon"></i>
+                <div class="panel-info">
+                  <div class="panel-title">销售订单</div>
+                  <div class="panel-desc">Sales Order</div>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </el-col>
+
+        <!-- 平台账号管理 -->
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <router-link to="/system/platform">
+            <div class="panel-item">
+              <div class="panel-content">
+                <i class="el-icon-link panel-icon"></i>
+                <div class="panel-info">
+                  <div class="panel-title">平台账号</div>
+                  <div class="panel-desc">Platform Management</div>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </el-col>
+
+        <!-- 知识模型管理 -->
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <router-link to="/system/knowledge">
+            <div class="panel-item">
+              <div class="panel-content">
+                <i class="el-icon-reading panel-icon"></i>
+                <div class="panel-info">
+                  <div class="panel-title">知识模型</div>
+                  <div class="panel-desc">Knowledge Management</div>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </el-col>
+      </el-row>
     </div>
-    
-    <!-- 功能模块区域 -->
-    <el-row :gutter="24" class="panel-group">
-      <el-col :xs="24" :sm="12" :md="8" :lg="6">
-        <router-link to="/system/user">
-          <div class="panel-item">
-            <div class="panel-content">
-              <i class="el-icon-user panel-icon"></i>
-              <div class="panel-info">
-                <div class="panel-title">用户管理</div>
-                <div class="panel-desc">User Management</div>
-              </div>
-            </div>
-          </div>
-        </router-link>
-      </el-col>
-      
-      <el-col :xs="24" :sm="12" :md="8" :lg="6">
-        <router-link to="/system/role">
-          <div class="panel-item">
-            <div class="panel-content">
-              <i class="el-icon-s-custom panel-icon"></i>
-              <div class="panel-info">
-                <div class="panel-title">角色管理</div>
-                <div class="panel-desc">Role Management</div>
-              </div>
-            </div>
-          </div>
-        </router-link>
-      </el-col>
-      
-      <el-col :xs="24" :sm="12" :md="8" :lg="6">
-        <router-link to="/system/permission">
-          <div class="panel-item">
-            <div class="panel-content">
-              <i class="el-icon-key panel-icon"></i>
-              <div class="panel-info">
-                <div class="panel-title">权限管理</div>
-                <div class="panel-desc">Permission Management</div>
-              </div>
-            </div>
-          </div>
-        </router-link>
-      </el-col>
-    </el-row>
   </div>
 </template>
 
@@ -94,30 +173,39 @@ export default {
     ])
   },
   methods: {
+    goToDashboard() {
+      if (this.$route.path !== '/dashboard') {
+        this.$router.push('/dashboard')
+      }
+    },
     handleLogout() {
       this.$confirm('确认退出登录吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$store.dispatch('user/logout').then(() => {
+      })
+        .then(() => {
+          return this.$store.dispatch('user/logout')
+        })
+        .then(() => {
           this.$router.push('/login')
         })
-      })
+        .catch(error => {
+          if (error !== 'cancel') {
+            console.error('Logout failed:', error)
+          }
+        })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.dashboard-container {
+.app-container {
   min-height: 100vh;
   background-color: #000000;
-  color: #ffffff;
-  overflow: hidden;
 }
 
-// 顶部导航栏样式
 .top-navbar {
   display: flex;
   justify-content: space-between;
@@ -127,220 +215,137 @@ export default {
   background: rgba(28, 28, 30, 0.8);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 215, 0, 0.1);
-
-  .brand {
-    display: flex;
-    align-items: center;
-    
-    .brand-icon {
-      font-size: 32px;
-      margin-right: 12px;
-      background: linear-gradient(to right, #FFD700, #FFA500);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .brand-text {
-      font-size: 20px;
-      font-weight: 500;
-      background: linear-gradient(to right, #FFD700, #FFA500);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  }
-
-  .user-dropdown {
-    .user-info {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
-
-      .avatar-icon {
-        font-size: 24px;
-        color: #FFD700;
-        margin-right: 8px;
-      }
-
-      .username {
-        color: #ffffff;
-        margin-right: 8px;
-      }
-
-      .el-icon-caret-bottom {
-        color: #8E8E93;
-        font-size: 12px;
-      }
-    }
-  }
 }
 
-// 欢迎区域样式
-.welcome-section {
-  text-align: center;
-  padding: 60px 0;
-  opacity: 0;
-  animation: fadeInUp 1s ease forwards;
+.brand {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
   
-  .dashboard-text {
-    font-size: 48px;
-    font-weight: 600;
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    
+    .brand-icon {
+      transform: scale(1.1);
+    }
+  }
+  
+  .brand-icon {
+    font-size: 32px;
+    margin-right: 12px;
     background: linear-gradient(to right, #FFD700, #FFA500);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 16px;
-    letter-spacing: -0.5px;
+    transition: transform 0.3s ease;
+  }
+
+  .brand-text {
+    font-size: 20px;
+    font-weight: 500;
+    background: linear-gradient(to right, #FFD700, #FFA500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.main-content {
+  padding: 24px;
+}
+
+.welcome-section {
+  text-align: center;
+  padding: 40px 0;
+  margin-bottom: 40px;
+  
+  .dashboard-text {
+    font-size: 30px;
+    font-weight: bold;
+    color: #FFD700;
+    margin-bottom: 10px;
   }
   
   .dashboard-subtitle {
-    font-size: 20px;
-    color: #8E8E93;
-    font-weight: 300;
+    font-size: 16px;
+    color: #FFA500;
+    opacity: 0.8;
   }
 }
 
-// 功能模块区域样式
 .panel-group {
-  padding: 0 24px;
-  
   .panel-item {
-    background: rgba(28, 28, 30, 0.8);
-    border-radius: 16px;
-    backdrop-filter: blur(20px);
-    padding: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
     margin-bottom: 24px;
+    transition: all 0.3s ease;
     cursor: pointer;
-    border: 1px solid rgba(255, 215, 0, 0.1);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0;
-    animation: fadeInUp 1s ease forwards;
-    animation-delay: calc(var(--index, 0) * 0.1s);
-
+    
     &:hover {
-      transform: translateY(-8px);
-      background: rgba(44, 44, 46, 0.8);
-      border-color: rgba(255, 215, 0, 0.3);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1);
+      background: rgba(255, 255, 255, 0.15);
+      
       .panel-icon {
-        color: #FFD700;
         transform: scale(1.1);
       }
-
-      .panel-title {
-        background: linear-gradient(to right, #FFD700, #FFA500);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
     }
-
+    
     .panel-content {
+      padding: 24px;
       display: flex;
       align-items: center;
-    }
-
-    .panel-icon {
-      font-size: 36px;
-      color: #ffffff;
-      margin-right: 20px;
-      transition: all 0.4s ease;
-    }
-
-    .panel-info {
-      flex: 1;
-    }
-
-    .panel-title {
-      font-size: 20px;
-      font-weight: 500;
-      margin-bottom: 8px;
-      color: #ffffff;
-      transition: all 0.4s ease;
-    }
-
-    .panel-desc {
-      font-size: 14px;
-      color: #8E8E93;
-      font-weight: 300;
+      
+      .panel-icon {
+        font-size: 36px;
+        margin-right: 16px;
+        color: #FFD700;
+        transition: transform 0.3s ease;
+      }
+      
+      .panel-info {
+        .panel-title {
+          font-size: 18px;
+          font-weight: 500;
+          color: #FFD700;
+          margin-bottom: 4px;
+        }
+        
+        .panel-desc {
+          font-size: 14px;
+          color: #FFA500;
+          opacity: 0.8;
+        }
+      }
     }
   }
 }
 
-// 动画
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// 为每个面板设置不同的动画延迟
-.panel-group {
-  .el-col {
-    &:nth-child(1) .panel-item { --index: 1; }
-    &:nth-child(2) .panel-item { --index: 2; }
-    &:nth-child(3) .panel-item { --index: 3; }
-  }
-}
-
-// 下拉菜单样式覆盖
-:deep(.el-dropdown-menu) {
-  background: rgba(28, 28, 30, 0.95);
-  border: 1px solid rgba(255, 215, 0, 0.1);
-  backdrop-filter: blur(20px);
+.user-dropdown {
+  cursor: pointer;
   
-  .el-dropdown-menu__item {
+  .user-info {
+    display: flex;
+    align-items: center;
     color: #ffffff;
     
-    i {
+    .avatar-icon {
+      font-size: 20px;
       margin-right: 8px;
     }
     
-    &:hover {
-      background: rgba(255, 215, 0, 0.1);
-      color: #FFD700;
-    }
-    
-    &.is-disabled {
-      color: #8E8E93;
+    .username {
+      margin-right: 4px;
     }
   }
 }
 
-// 响应式调整
-@media screen and (max-width: 768px) {
-  .top-navbar {
-    padding: 0 16px;
-    
-    .brand-text {
-      display: none;
+:deep(.user-dropdown-menu) {
+  .el-dropdown-menu__item {
+    i {
+      margin-right: 8px;
     }
-  }
-
-  .welcome-section {
-    padding: 40px 0;
-    
-    .dashboard-text {
-      font-size: 32px;
-    }
-    
-    .dashboard-subtitle {
-      font-size: 16px;
-    }
-  }
-
-  .panel-group {
-    padding: 0 16px;
   }
 }
 </style> 

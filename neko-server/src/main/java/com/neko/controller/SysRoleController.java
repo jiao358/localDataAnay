@@ -1,7 +1,9 @@
 package com.neko.controller;
 
 import com.neko.entity.SysRole;
+import com.neko.entity.SysPermission;
 import com.neko.service.SysRoleService;
+import com.neko.service.SysPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,9 @@ public class SysRoleController {
     
     @Autowired
     private SysRoleService roleService;
+    
+    @Autowired
+    private SysPermissionService permissionService;
 
     @GetMapping
     public ResponseEntity<?> list(@RequestParam(required = false) String keyword) {
@@ -74,6 +79,34 @@ public class SysRoleController {
     public ResponseEntity<?> updateStatus(@PathVariable Long id, @RequestParam Integer status) {
         try {
             roleService.updateRoleStatus(id, status);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
+    }
+
+    @GetMapping("/{id}/permissions")
+    public ResponseEntity<?> getRolePermissions(@PathVariable Long id) {
+        try {
+            List<SysPermission> permissions = permissionService.getPermissionsByRoleId(id);
+            return ResponseEntity.ok(permissions);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
+    }
+
+    @PutMapping("/{id}/permissions")
+    public ResponseEntity<?> updateRolePermissions(
+        @PathVariable Long id,
+        @RequestBody Map<String, List<Long>> request
+    ) {
+        try {
+            List<Long> permissionIds = request.get("permissionIds");
+            permissionService.updateRolePermissions(id, permissionIds);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();

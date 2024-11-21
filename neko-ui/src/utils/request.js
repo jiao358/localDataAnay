@@ -1,18 +1,26 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
+// 创建 axios 实例
 const service = axios.create({
-  baseURL: '/api',
+  baseURL: '/api', // 修改为相对路径
   timeout: 5000
 })
+
+// 处理图片URL的函数
+export function getImageUrl(path) {
+  if (!path) return ''
+  // 将 8082 替换为 8081
+  return path;
+}
 
 // 请求拦截器
 service.interceptors.request.use(
   config => {
     if (store.getters.token) {
-      config.headers['Authorization'] = `Bearer ${getToken()}`
+      config.headers['Authorization'] = 'Bearer ' + getToken()
     }
     return config
   },
@@ -27,28 +35,26 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     
-    // 如果返回的是文件流，直接返回
-    if (response.config.responseType === 'blob') {
-      return response
-    }
-
-    // 如果没有code字段，说明是正常数据
-    if (res.code === undefined) {
-      return res
-    }
-
-    // 如果code不为200，说明有错误
-    if (res.code !== 200) {
+    if (response.status !== 200) {
       Message({
         message: res.message || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
 
-      // 401: Token过期
-      if (res.code === 401) {
-        store.dispatch('user/resetToken').then(() => {
-          location.reload()
+      if (response.status === 401) {
+        MessageBox.confirm(
+          '登录状态已过期，请重新登录',
+          '确定登出',
+          {
+            confirmButtonText: '重新登录',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }
+        ).then(() => {
+          store.dispatch('user/resetToken').then(() => {
+            location.reload()
+          })
         })
       }
       return Promise.reject(new Error(res.message || 'Error'))
@@ -57,9 +63,9 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err:', error.response)
+    console.log('err' + error)
     Message({
-      message: error.response?.data?.message || '请求失败',
+      message: error.message,
       type: 'error',
       duration: 5 * 1000
     })

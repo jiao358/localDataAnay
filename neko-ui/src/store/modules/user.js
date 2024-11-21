@@ -1,5 +1,5 @@
-import { login, getInfo } from '@/api/user'
-import { getToken, setToken } from '@/utils/auth'
+import { login, logout } from '@/api/user'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const state = {
   token: getToken(),
@@ -16,6 +16,11 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  RESET_STATE: (state) => {
+    state.token = ''
+    state.name = ''
+    state.roles = []
   }
 }
 
@@ -38,18 +43,13 @@ const actions = {
     })
   },
 
-  getInfo({ commit }) {
+  logout({ commit }) {
     return new Promise((resolve, reject) => {
-      getInfo()
-        .then(response => {
-          const { data } = response
-          if (!data) {
-            reject('验证失败，请重新登录')
-          }
-          const { roles, username } = data
-          commit('SET_ROLES', roles)
-          commit('SET_NAME', username)
-          resolve(data)
+      logout()
+        .then(() => {
+          removeToken()
+          commit('RESET_STATE')
+          resolve()
         })
         .catch(error => {
           reject(error)
