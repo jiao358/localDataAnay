@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import router from '@/router'
 
 // 获取角色列表
 export function getRoles(params) {
@@ -6,6 +7,15 @@ export function getRoles(params) {
     url: '/roles',
     method: 'get',
     params
+  }).catch(error => {
+    debugger;
+    // 如果是401错误，跳转到登录页
+    if (error.response && error.response.status === 401) {
+      
+      // router.push(`/login?redirect=${router.currentRoute.fullPath}`)
+      router.push(`/login`)
+    }
+    return Promise.reject(error)
   })
 }
 

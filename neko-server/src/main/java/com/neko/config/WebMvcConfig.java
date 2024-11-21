@@ -1,28 +1,40 @@
 package com.neko.config;
 
+import com.neko.interceptor.AuthInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    @Autowired
+    private AuthInterceptor authInterceptor;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // API 请求处理
-        registry.addResourceHandler("/api/**")
-                .addResourceLocations("classpath:/static/");
-
-        // 上传文件访问配置
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:uploads/");  // 使用相对路径
+                .addResourceLocations("file:uploads/");
 
-        // 静态资源处理
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/")
-                .addResourceLocations("classpath:/public/")
-                .addResourceLocations("classpath:/META-INF/resources/");
+                .addResourceLocations("classpath:/static/");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authInterceptor)
+                .addPathPatterns("/api/**")
+                .excludePathPatterns(
+                        "/api/auth/login",
+                        "/api/auth/register",
+                        "/api/auth/logout",
+                        "/api/health",
+                        "/uploads/**",
+                        "/error"
+                );
     }
 
     @Override
@@ -35,4 +47,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
             .allowCredentials(true)
             .maxAge(3600);
     }
+
 } 
