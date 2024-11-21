@@ -1,0 +1,66 @@
+import { login, getInfo } from '@/api/user'
+import { getToken, setToken } from '@/utils/auth'
+
+const state = {
+  token: getToken(),
+  name: '',
+  roles: []
+}
+
+const mutations = {
+  SET_TOKEN: (state, token) => {
+    state.token = token
+  },
+  SET_NAME: (state, name) => {
+    state.name = name
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
+  }
+}
+
+const actions = {
+  login({ commit }, userInfo) {
+    const { username, password } = userInfo
+    return new Promise((resolve, reject) => {
+      login({ username: username.trim(), password: password })
+        .then(response => {
+          const { data } = response
+          commit('SET_TOKEN', data.token)
+          commit('SET_NAME', data.username)
+          commit('SET_ROLES', data.roles)
+          setToken(data.token)
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
+    })
+  },
+
+  getInfo({ commit }) {
+    return new Promise((resolve, reject) => {
+      getInfo()
+        .then(response => {
+          const { data } = response
+          if (!data) {
+            reject('验证失败，请重新登录')
+          }
+          const { roles, username } = data
+          commit('SET_ROLES', roles)
+          commit('SET_NAME', username)
+          resolve(data)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export default {
+  namespaced: true,
+  state,
+  mutations,
+  actions
+} 

@@ -1,0 +1,15 @@
+// element-ui 样式覆盖
+.el-breadcrumb__inner,
+.el-breadcrumb__inner a {
+  font-weight: 400 !important;
+}
+
+.el-menu--collapse .el-menu .el-submenu {
+  min-width: 200px !important;
+}
+
+.el-dropdown-menu__item {
+  padding: 0 20px;
+  line-height: 35px;
+  min-width: 200px;
+} 
