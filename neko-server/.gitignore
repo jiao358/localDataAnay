@@ -51,4 +51,5 @@ application-prod.yml
 
 # Other
 *.pid
-*.orig 
+*.orig
+/target/
