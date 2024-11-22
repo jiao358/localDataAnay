@@ -157,6 +157,21 @@
             </div>
           </router-link>
         </el-col>
+
+        <!-- 供应链商品 -->
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <router-link to="/system/supply-chain">
+            <div class="panel-item">
+              <div class="panel-content">
+                <i class="el-icon-goods panel-icon"></i>
+                <div class="panel-info">
+                  <div class="panel-title">供应链商品</div>
+                  <div class="panel-desc">Supply Chain Products</div>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </el-col>
       </el-row>
     </div>
   </div>

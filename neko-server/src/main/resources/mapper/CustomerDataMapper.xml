@@ -65,4 +65,19 @@
         SET communication_count = communication_count + 1
         WHERE id = #{id}
     </update>
+
+    <resultMap id="BaseResultMap" type="com.neko.entity.CustomerData">
+        <id column="id" property="id"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="customer_phone" property="customerPhone"/>
+        <result column="customer_wechat" property="customerWechat"/>
+        <result column="customer_address" property="customerAddress"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="deleted" property="deleted"/>
+        <result column="version" property="version"/>
+    </resultMap>
 </mapper> 

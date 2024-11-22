@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neko.mapper.SupplyChainProductMapper">
+    <select id="queryByCondition" resultType="com.neko.entity.SupplyChainProduct">
+        SELECT * FROM supply_chain_product
+        <where>
+            <if test="query.productName != null and query.productName != ''">
+                AND product_name LIKE CONCAT('%', #{query.productName}, '%')
+            </if>
+            <if test="query.categoryCode != null and query.categoryCode != ''">
+                AND category_code = #{query.categoryCode}
+            </if>
+            <if test="query.supplierCompany != null and query.supplierCompany != ''">
+                AND supplier_company LIKE CONCAT('%', #{query.supplierCompany}, '%')
+            </if>
+            AND deleted = 0
+        </where>
+        ORDER BY create_time DESC
+    </select>
+</mapper> 

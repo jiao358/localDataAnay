@@ -117,6 +117,18 @@ export const constantRoutes = [
             meta: { title: '知识模型', icon: 'education' }
           }
         ]
+      },
+      {
+        path: '/system/supply-chain',
+        component: Layout,
+        children: [
+          {
+            path: '',
+            component: () => import('@/views/system/supply-chain/index'),
+            name: 'SupplyChain',
+            meta: { title: '供应链商品', icon: 'shopping' }
+          }
+        ]
       }
     ]
   }

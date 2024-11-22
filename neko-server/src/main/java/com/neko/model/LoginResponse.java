@@ -14,6 +14,7 @@ public class LoginResponse {
         private String username;
         private String[] roles;
     }
+    
 
     public static LoginResponse success(String token, String username, String[] roles) {
         LoginResponse response = new LoginResponse();
