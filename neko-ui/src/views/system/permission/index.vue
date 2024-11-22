@@ -8,6 +8,12 @@
           <span class="brand-text">Neko Admin</span>
         </div>
       </div>
+      
+      <!-- 添加中间区域显示模块名称 -->
+      <div class="center-section">
+        <span class="module-name">权限管理</span>
+      </div>
+
       <div class="right-section">
         <el-dropdown trigger="click" class="user-dropdown">
           <div class="user-info">
@@ -534,6 +540,20 @@ export default {
   background: rgba(28, 28, 30, 0.8);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+
+  // 添加中间区域样式
+  .center-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    .module-name {
+      color: #FFD700;
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
 }
 
 .brand {
