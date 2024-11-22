@@ -1,10 +1,15 @@
 package com.neko.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.io.Serializable;
 
 @Data
-public class SysUser {
+@TableName("sys_user")
+public class SysUser implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private Long id;
     private String username;
     private String password;
