@@ -4,7 +4,13 @@ export function getSupplyChainProducts(params) {
   return request({
     url: '/system/supply-chain',
     method: 'get',
-    params
+    params: {
+      current: params.current,
+      size: params.size,
+      productName: params.productName || '',
+      categoryCode: params.categoryCode || '',
+      supplierCompany: params.supplierCompany || ''
+    }
   })
 }
 

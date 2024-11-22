@@ -1,6 +1,7 @@
 package com.neko.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.neko.config.handler.JsonListTypeHandler;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ public class SupplyChainProduct {
     private String productCode;
     private String mainImage;
     
-    @TableField(typeHandler = com.neko.config.handler.JsonListTypeHandler.class)
+    @TableField(typeHandler = JsonListTypeHandler.class)
     private List<String> otherImages;
     
     private String materialUrl;
@@ -45,5 +46,6 @@ public class SupplyChainProduct {
     private Boolean deleted;
     
     @Version
+    @TableField(fill = FieldFill.INSERT)
     private Integer version;
 } 

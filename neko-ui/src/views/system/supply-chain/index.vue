@@ -464,8 +464,15 @@ export default {
       try {
         this.listLoading = true
         const response = await getSupplyChainProducts(this.listQuery)
-        this.list = response.records
-        this.total = response.total
+        console.log('Response:', response)
+        
+        if (response.data) {
+          this.list = response.data.records || []
+          this.total = response.data.total || 0
+        } else {
+          this.list = []
+          this.total = 0
+        }
       } catch (error) {
         console.error('Failed to get products:', error)
         this.$message.error('获取商品列表失败')
@@ -555,13 +562,16 @@ export default {
         const formData = new FormData()
         formData.append('file', file)
         const response = await uploadImage(formData)
-        if (response && response.url) {
-          this.form.mainImage = response.url
+        
+        if (response.code === 200 && response.data) {
+          this.form.mainImage = response.data.url
           this.$message.success('上传成功')
+        } else {
+          throw new Error(response.message || '上传失败')
         }
       } catch (error) {
         console.error('Upload failed:', error)
-        this.$message.error('上传失败')
+        this.$message.error('上传失败：' + (error.message || '未知错误'))
       }
     },
     async handleOtherImageUpload({ file }) {
@@ -569,17 +579,20 @@ export default {
         const formData = new FormData()
         formData.append('file', file)
         const response = await uploadImage(formData)
-        if (response && response.url) {
-          this.form.otherImages = [...(this.form.otherImages || []), response.url]
+        
+        if (response.code === 200 && response.data) {
+          this.form.otherImages = [...(this.form.otherImages || []), response.data.url]
           this.otherImagesList.push({
-            url: response.url,
+            url: response.data.url,
             name: file.name
           })
           this.$message.success('上传成功')
+        } else {
+          throw new Error(response.message || '上传失败')
         }
       } catch (error) {
         console.error('Upload failed:', error)
-        this.$message.error('上传失败')
+        this.$message.error('上传失败：' + (error.message || '未知错误'))
       }
     },
     handleRemoveImage(file) {
@@ -792,22 +805,22 @@ export default {
       border-color: #409EFF;
     }
   }
-}
 
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 120px;
-  height: 120px;
-  line-height: 120px;
-  text-align: center;
-}
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    text-align: center;
+  }
 
-.avatar {
-  width: 120px;
-  height: 120px;
-  display: block;
-  object-fit: cover;
+  .avatar {
+    width: 120px;
+    height: 120px;
+    display: block;
+    object-fit: cover;
+  }
 }
 
 :deep(.el-upload--picture-card) {

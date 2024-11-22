@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.neko.mapper.SupplyChainProductMapper">
-    <select id="queryByCondition" resultType="com.neko.entity.SupplyChainProduct">
+    <resultMap id="BaseResultMap" type="com.neko.entity.SupplyChainProduct">
+        <id column="id" property="id"/>
+        <result column="product_name" property="productName"/>
+        <result column="category_code" property="categoryCode"/>
+        <result column="wholesale_price" property="wholesalePrice"/>
+        <result column="limit_price" property="limitPrice"/>
+        <result column="unit_code" property="unitCode"/>
+        <result column="quantity" property="quantity"/>
+        <result column="supplier_company" property="supplierCompany"/>
+        <result column="supplier_contact" property="supplierContact"/>
+        <result column="supplier_phone" property="supplierPhone"/>
+        <result column="supplier_wechat" property="supplierWechat"/>
+        <result column="product_code" property="productCode"/>
+        <result column="main_image" property="mainImage"/>
+        <result column="other_images" property="otherImages" typeHandler="com.neko.config.handler.JsonListTypeHandler"/>
+        <result column="material_url" property="materialUrl"/>
+        <result column="description" property="description"/>
+        <result column="batch_time" property="batchTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="deleted" property="deleted"/>
+        <result column="version" property="version"/>
+    </resultMap>
+
+    <select id="queryByCondition" resultMap="BaseResultMap">
         SELECT * FROM supply_chain_product
         <where>
             <if test="query.productName != null and query.productName != ''">

@@ -41,7 +41,14 @@ public class SupplyChainProductController {
 
     @PutMapping("/{id}")
     public Result<Boolean> update(@PathVariable Long id, @Valid @RequestBody SupplyChainProduct product) {
+        SupplyChainProduct existingProduct = supplyChainProductService.getById(id);
+        if (existingProduct == null) {
+            return Result.error(404, "商品不存在");
+        }
+        
         product.setId(id);
+        product.setVersion(existingProduct.getVersion());
+        
         return Result.success(supplyChainProductService.updateById(product));
     }
 

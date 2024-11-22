@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,8 +27,10 @@ import java.util.UUID;
 @Service
 public class SupplyChainProductServiceImpl extends ServiceImpl<SupplyChainProductMapper, SupplyChainProduct> implements SupplyChainProductService {
     
-    @Value("${file.upload.path}")
+    @Value("${upload.path:./uploads}")
     private String uploadPath;
+
+    private static final String URL_PREFIX = "/uploads/";
 
     @Override
     public IPage<SupplyChainProduct> queryPage(Page<SupplyChainProduct> page, SupplyChainProduct query) {
@@ -51,22 +54,30 @@ public class SupplyChainProductServiceImpl extends ServiceImpl<SupplyChainProduc
 
     @Override
     public Map<String, String> uploadImage(MultipartFile file) throws Exception {
-        String fileName = UUID.randomUUID().toString() + getFileExtension(file.getOriginalFilename());
-        String filePath = "supply-chain/" + fileName;
-        
-        // 确保目录存在
-        Files.createDirectories(Paths.get(uploadPath, "supply-chain"));
-        
-        // 保存文件
-        Files.copy(file.getInputStream(), Paths.get(uploadPath, filePath));
-        
-        Map<String, String> result = new HashMap<>();
-        result.put("url", filePath);
-        return result;
-    }
+        try {
+            // 创建上传目录
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
 
-    private String getFileExtension(String filename) {
-        return filename.substring(filename.lastIndexOf("."));
+            // 生成新的文件名
+            String originalFilename = file.getOriginalFilename();
+            String extension = StringUtils.getFilenameExtension(originalFilename);
+            String newFilename = UUID.randomUUID().toString() + "." + extension;
+
+            // 保存文件
+            Path filePath = Paths.get(uploadPath, newFilename);
+            Files.write(filePath, file.getBytes());
+
+            // 返回访问URL
+            Map<String, String> result = new HashMap<>();
+            result.put("url", URL_PREFIX + newFilename);
+            return result;
+        } catch (Exception e) {
+            log.error("Failed to upload image", e);
+            throw new RuntimeException("Failed to upload image: " + e.getMessage());
+        }
     }
 
     @Override
