@@ -46,6 +46,7 @@
           style="width: 200px;"
           class="filter-item"
           @keyup.enter.native="handleFilter"
+          clearable
         />
         <el-select
           v-model="listQuery.contentCategory"
@@ -63,6 +64,9 @@
         </el-select>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
           搜索
+        </el-button>
+        <el-button class="filter-item" type="info" icon="el-icon-delete" @click="clearSearch">
+          清空搜索
         </el-button>
         <el-button
           class="filter-item"
@@ -522,7 +526,12 @@ export default {
           }
         })
     },
-    getImageUrl
+    getImageUrl,
+    clearSearch() {
+      this.listQuery.contentName = ''
+      this.listQuery.contentCategory = ''
+      this.handleFilter()
+    }
   }
 }
 </script>
