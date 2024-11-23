@@ -32,13 +32,16 @@ public class KnowledgeDataServiceImpl implements KnowledgeDataService {
     private static final String URL_PREFIX = "/uploads/";
 
     @Override
-    public IPage<KnowledgeData> listKnowledge(Page<KnowledgeData> page, String contentName, String contentCategory) {
+    public IPage<KnowledgeData> listKnowledge(Page<KnowledgeData> page, String contentName, String contentCategory, String contentSummary) {
         LambdaQueryWrapper<KnowledgeData> queryWrapper = new LambdaQueryWrapper<>();
         if (StringUtils.hasText(contentName)) {
             queryWrapper.like(KnowledgeData::getContentName, contentName);
         }
         if (StringUtils.hasText(contentCategory)) {
             queryWrapper.eq(KnowledgeData::getContentCategory, contentCategory);
+        }
+        if (StringUtils.hasText(contentSummary)) {
+            queryWrapper.like(KnowledgeData::getContentSummary, contentSummary);
         }
         queryWrapper.orderByDesc(KnowledgeData::getCreateTime);
         return knowledgeMapper.selectPage(page, queryWrapper);

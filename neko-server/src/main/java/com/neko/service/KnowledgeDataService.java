@@ -6,7 +6,7 @@ import com.neko.entity.KnowledgeData;
 import java.util.List;
 
 public interface KnowledgeDataService {
-    IPage<KnowledgeData> listKnowledge(Page<KnowledgeData> page, String contentName, String contentCategory);
+    IPage<KnowledgeData> listKnowledge(Page<KnowledgeData> page, String contentName, String contentCategory, String contentSummary);
     KnowledgeData getKnowledgeById(Long id);
     void saveKnowledge(KnowledgeData knowledge);
     void updateKnowledge(KnowledgeData knowledge);

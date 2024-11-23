@@ -25,11 +25,12 @@ public class KnowledgeDataController {
         @RequestParam(defaultValue = "1") long page,
         @RequestParam(defaultValue = "10") long limit,
         @RequestParam(required = false) String contentName,
-        @RequestParam(required = false) String contentCategory
+        @RequestParam(required = false) String contentCategory,
+        @RequestParam(required = false) String contentSummary
     ) {
         try {
             Page<KnowledgeData> pageParam = new Page<>(page, limit);
-            IPage<KnowledgeData> pageResult = knowledgeService.listKnowledge(pageParam, contentName, contentCategory);
+            IPage<KnowledgeData> pageResult = knowledgeService.listKnowledge(pageParam, contentName, contentCategory, contentSummary);
             return ResponseEntity.ok(pageResult);
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();

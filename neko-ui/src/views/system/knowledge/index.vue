@@ -48,6 +48,14 @@
           @keyup.enter.native="handleFilter"
           clearable
         />
+        <el-input
+          v-model="listQuery.contentSummary"
+          placeholder="内容总结"
+          style="width: 200px;"
+          class="filter-item"
+          @keyup.enter.native="handleFilter"
+          clearable
+        />
         <el-select
           v-model="listQuery.contentCategory"
           placeholder="内容分类"
@@ -265,7 +273,8 @@ export default {
         page: 1,
         limit: 10,
         contentName: '',
-        contentCategory: ''
+        contentCategory: '',
+        contentSummary: ''
       },
       categoryOptions: [],
       dialogVisible: false,
@@ -372,7 +381,8 @@ export default {
           page: this.listQuery.page,
           limit: this.listQuery.limit,
           contentName: this.listQuery.contentName,
-          contentCategory: this.listQuery.contentCategory
+          contentCategory: this.listQuery.contentCategory,
+          contentSummary: this.listQuery.contentSummary
         })
         
         // 使用后端返回的分页数据
