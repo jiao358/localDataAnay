@@ -1,13 +1,15 @@
 package com.neko.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.neko.entity.MultiPlatformData;
 import com.neko.service.MultiPlatformDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,15 +21,16 @@ public class MultiPlatformDataController {
 
     @GetMapping
     public ResponseEntity<?> list(
+        @RequestParam(defaultValue = "1") long page,
+        @RequestParam(defaultValue = "10") long limit,
         @RequestParam(required = false) String accountName,
-        @RequestParam(required = false) String platformType
+        @RequestParam(required = false) String platformType,
+        @RequestParam(required = false) String securityInfo
     ) {
         try {
-            List<MultiPlatformData> platforms = platformService.listPlatforms(accountName, platformType);
-            Map<String, Object> response = new HashMap<>();
-            response.put("records", platforms);
-            response.put("total", platforms.size());
-            return ResponseEntity.ok(response);
+            Page<MultiPlatformData> pageParam = new Page<>(page, limit);
+            IPage<MultiPlatformData> pageResult = platformService.listPlatforms(pageParam, accountName, platformType, securityInfo);
+            return ResponseEntity.ok(pageResult);
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();
             error.put("message", e.getMessage());

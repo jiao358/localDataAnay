@@ -46,6 +46,15 @@
           style="width: 200px;"
           class="filter-item"
           @keyup.enter.native="handleFilter"
+          clearable
+        />
+        <el-input
+          v-model="listQuery.securityInfo"
+          placeholder="密保内容"
+          style="width: 200px;"
+          class="filter-item"
+          @keyup.enter.native="handleFilter"
+          clearable
         />
         <el-select
           v-model="listQuery.platformType"
@@ -63,6 +72,9 @@
         </el-select>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
           搜索
+        </el-button>
+        <el-button class="filter-item" type="info" icon="el-icon-delete" @click="clearSearch">
+          清空搜索
         </el-button>
         <el-button
           class="filter-item"
@@ -99,11 +111,15 @@
           show-overflow-tooltip
         />
         <el-table-column
-          prop="platformTypeName"
+          prop="platformType"
           label="平台类型"
           align="center"
           width="120"
-        />
+        >
+          <template slot-scope="scope">
+            {{ getDictLabel(platformTypes, scope.row.platformType) }}
+          </template>
+        </el-table-column>
         <el-table-column
           prop="platformUrl"
           label="链接地址"
@@ -134,6 +150,13 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column
+          prop="securityInfo"
+          label="密保内容"
+          align="center"
+          min-width="200"
+          show-overflow-tooltip
+        />
         <el-table-column
           label="操作"
           align="center"
@@ -446,6 +469,16 @@ export default {
             this.$message.error('删除失败')
           }
         })
+    },
+    clearSearch() {
+      this.listQuery.accountName = ''
+      this.listQuery.platformType = ''
+      this.listQuery.securityInfo = ''
+      this.getList()
+    },
+    getDictLabel(options, value) {
+      const option = Object.entries(options).find(([key]) => key === value)
+      return option ? option[1] : '-'
     }
   }
 }

@@ -1,10 +1,12 @@
 package com.neko.entity;
 
-import com.neko.constant.PlatformTypeDict;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
+@TableName("multi_platform_data")
 public class MultiPlatformData {
     private Long id;
     private String accountName;
@@ -18,9 +20,11 @@ public class MultiPlatformData {
     private LocalDateTime updateTime;
 
     // 非数据库字段，用于前端显示
+    @TableField(exist = false)
     private String platformTypeName;
 
     public String getPlatformTypeName() {
-        return PlatformTypeDict.getTypeName(this.platformType);
+        // 从字典服务获取平台类型名称
+        return platformType;
     }
 } 

@@ -1,11 +1,13 @@
 package com.neko.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.neko.entity.MultiPlatformData;
 import java.util.List;
 import java.util.Map;
 
 public interface MultiPlatformDataService {
-    List<MultiPlatformData> listPlatforms(String accountName, String platformType);
+    IPage<MultiPlatformData> listPlatforms(Page<MultiPlatformData> page, String accountName, String platformType, String securityInfo);
     MultiPlatformData getPlatformById(Long id);
     void savePlatform(MultiPlatformData platform);
     void updatePlatform(MultiPlatformData platform);
