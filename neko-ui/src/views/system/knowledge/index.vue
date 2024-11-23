@@ -364,9 +364,21 @@ export default {
     async getList() {
       try {
         this.listLoading = true
-        const response = await getKnowledgeList(this.listQuery)
-        this.list = response.records || []
-        this.total = response.total || 0
+        const response = await getKnowledgeList({
+          page: this.listQuery.page,
+          limit: this.listQuery.limit,
+          contentName: this.listQuery.contentName,
+          contentCategory: this.listQuery.contentCategory
+        })
+        
+        // 使用后端返回的分页数据
+        if (response && response.records) {
+          this.list = response.records
+          this.total = response.total
+        } else {
+          this.list = []
+          this.total = 0
+        }
       } catch (error) {
         console.error('Failed to get knowledge list:', error)
         this.$message.error('获取知识点列表失败')

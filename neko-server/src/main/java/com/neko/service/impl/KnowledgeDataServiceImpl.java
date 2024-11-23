@@ -1,5 +1,8 @@
 package com.neko.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.neko.entity.KnowledgeData;
 import com.neko.mapper.KnowledgeDataMapper;
 import com.neko.service.KnowledgeDataService;
@@ -29,8 +32,16 @@ public class KnowledgeDataServiceImpl implements KnowledgeDataService {
     private static final String URL_PREFIX = "/uploads/";
 
     @Override
-    public List<KnowledgeData> listKnowledge(String contentName, String contentCategory) {
-        return knowledgeMapper.selectList(contentName, contentCategory);
+    public IPage<KnowledgeData> listKnowledge(Page<KnowledgeData> page, String contentName, String contentCategory) {
+        LambdaQueryWrapper<KnowledgeData> queryWrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.hasText(contentName)) {
+            queryWrapper.like(KnowledgeData::getContentName, contentName);
+        }
+        if (StringUtils.hasText(contentCategory)) {
+            queryWrapper.eq(KnowledgeData::getContentCategory, contentCategory);
+        }
+        queryWrapper.orderByDesc(KnowledgeData::getCreateTime);
+        return knowledgeMapper.selectPage(page, queryWrapper);
     }
 
     @Override
@@ -48,7 +59,7 @@ public class KnowledgeDataServiceImpl implements KnowledgeDataService {
     @Override
     @Transactional
     public void updateKnowledge(KnowledgeData knowledge) {
-        knowledgeMapper.update(knowledge);
+        knowledgeMapper.updateById(knowledge);
     }
 
     @Override
@@ -69,7 +80,7 @@ public class KnowledgeDataServiceImpl implements KnowledgeDataService {
                 e.printStackTrace();
             }
         }
-        knowledgeMapper.delete(id);
+        knowledgeMapper.deleteById(id);
     }
 
     @Override

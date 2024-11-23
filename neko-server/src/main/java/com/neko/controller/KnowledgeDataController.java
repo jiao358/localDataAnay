@@ -1,5 +1,7 @@
 package com.neko.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.neko.entity.KnowledgeData;
 import com.neko.service.KnowledgeDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +22,15 @@ public class KnowledgeDataController {
 
     @GetMapping
     public ResponseEntity<?> list(
+        @RequestParam(defaultValue = "1") long page,
+        @RequestParam(defaultValue = "10") long limit,
         @RequestParam(required = false) String contentName,
         @RequestParam(required = false) String contentCategory
     ) {
         try {
-            List<KnowledgeData> knowledge = knowledgeService.listKnowledge(contentName, contentCategory);
-            Map<String, Object> response = new HashMap<>();
-            response.put("records", knowledge);
-            response.put("total", knowledge.size());
-            return ResponseEntity.ok(response);
+            Page<KnowledgeData> pageParam = new Page<>(page, limit);
+            IPage<KnowledgeData> pageResult = knowledgeService.listKnowledge(pageParam, contentName, contentCategory);
+            return ResponseEntity.ok(pageResult);
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();
             error.put("message", e.getMessage());

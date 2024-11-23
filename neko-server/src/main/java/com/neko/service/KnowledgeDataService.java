@@ -1,10 +1,12 @@
 package com.neko.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.neko.entity.KnowledgeData;
 import java.util.List;
 
 public interface KnowledgeDataService {
-    List<KnowledgeData> listKnowledge(String contentName, String contentCategory);
+    IPage<KnowledgeData> listKnowledge(Page<KnowledgeData> page, String contentName, String contentCategory);
     KnowledgeData getKnowledgeById(Long id);
     void saveKnowledge(KnowledgeData knowledge);
     void updateKnowledge(KnowledgeData knowledge);
